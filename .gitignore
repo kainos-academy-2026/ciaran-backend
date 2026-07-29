@@ -12,6 +12,11 @@ dist/
 team1.env
 *.env
 
+# Local corporate certificates for Docker trust setup
+corporate-ca.crt
+corporate-ca.cer
+corporate-ca.pem
+
 # IDE
 .vscode/
 .idea/
@@ -40,3 +45,17 @@ compose.yaml
 
 # Test reports
 test-reports/
+
+# Terraform
+.terraform/
+my-infrastructure/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+*.tfvars
+*.tfvars.json

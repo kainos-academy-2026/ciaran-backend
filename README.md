@@ -41,6 +41,78 @@ Kainos Job Roles API: a Node.js/Express backend using Prisma with PostgreSQL.
    npm run seed
    ```
 
+## Docker
+
+This project includes two multi-stage Docker builds: `Dockerfile` for the standard Node runtime and `Dockerfile.distroless` for the distroless runtime.
+
+### Prerequisites
+
+- Docker Desktop (or Docker Engine)
+
+### Certificate Handling
+
+The Dockerfile expects an optional `corporate-ca.crt` file in the project root. This file is **not tracked in git** for security reasons (to prevent accidental commits of real certificates).
+
+**For local development:**
+
+1. Create your corporate CA certificate file:
+
+```bash
+security find-certificate -c "KAINOS-ZSCALER G2" -p > corporate-ca.crt
+security find-certificate -c "KAINOS-INSPECTION G2" -p >> corporate-ca.crt
+security find-certificate -c "KAINOS-ROOT-CA G2" -p >> corporate-ca.crt
+```
+
+2. Validate the certificate:
+
+```bash
+openssl x509 -in corporate-ca.crt -noout -subject -issuer
+```
+
+**For CI/CD environments:**
+
+If your CI/CD pipeline doesn't have a corporate certificate file, the `COPY corporate-ca.cr[t]` instruction uses bracket expansion syntax which gracefully handles missing files. The build will continue, and `NODE_EXTRA_CA_CERTS` is set in case a certificate is present at runtime.
+
+Alternatively, provide the certificate as a CI/CD secret and add it to the build context before building the Docker image.
+
+### Build the image
+
+```bash
+docker build --progress=plain -t team1-backend:local .
+docker build --progress=plain -f Dockerfile.distroless -t team1-backend:distroless .
+```
+
+### Run with Postgres from `compose.yml`
+
+Start Postgres:
+
+```bash
+docker compose up -d postgres
+```
+
+Run the API container:
+
+```bash
+docker run --rm -d \
+   --name team1-backend-local \
+   -p 3001:3001 \
+   --env-file .env \
+   -e DATABASE_URL='postgresql://academy_user:academy_password@host.docker.internal:5432/academy_db' \
+   team1-backend:local
+```
+
+Check health:
+
+```bash
+curl -i http://localhost:3001/health
+```
+
+### Troubleshooting
+
+- `unable to get local issuer certificate` during `prisma generate` or Docker build: create the `corporate-ca.crt` file with your corporate certificate chain as described in the Certificate Handling section.
+- `Missing authentication token` from `/job-roles`: call `/auth/login` first, then send `Authorization: Bearer <token>`.
+- Login/API 500 errors in Docker: verify `DATABASE_URL` points to a reachable host from inside the container (for local Postgres on macOS use `host.docker.internal`).
+
 ## Git Hook Setup
 
 This repository includes a pre-commit hook at `.githooks/pre-commit` that runs `npm run lint:fix` before each commit.
