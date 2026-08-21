@@ -1,0 +1,82 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model JobRole {
+  jobRoleId    Int      @id @default(autoincrement())
+  roleName     String
+  location     String
+  capabilityId Int
+  bandId       Int
+  closingDate  DateTime
+  status       String
+  specification String
+  description  String
+  responsibilities String
+  numberOfOpenPositions Int
+  capability Capability @relation(fields: [capabilityId], references: [capabilityId])
+  band       Band       @relation(fields: [bandId], references: [bandId])
+  applications Application[]
+
+  @@map("job_roles")
+}
+
+model User {
+  userId       Int      @id @default(autoincrement())
+  email        String   @unique
+  password     String
+  role         UserRole @default(USER)
+  applications Application[]
+
+  @@map("users")
+}
+
+model Application {
+  applicationId Int @id @default(autoincrement())
+  userId        Int
+  jobRoleId     Int
+  user          User @relation(fields: [userId], references: [userId])
+  jobRole       JobRole @relation(fields: [jobRoleId], references: [jobRoleId])
+  cvURL         String
+  status        Status @default(IN_PROGRESS)
+  dateApplied   DateTime @default(now())
+}
+
+enum Status {
+  OPEN
+  CLOSED
+  IN_PROGRESS
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model Capability {
+  capabilityId   Int    @id @default(autoincrement())
+  capabilityName String
+
+  jobRoles JobRole[]
+
+  @@map("capability")
+}
+
+model Band {
+  bandId   Int    @id @default(autoincrement())
+  bandName String
+
+  jobRoles JobRole[]
+
+  @@map("band")
+}
