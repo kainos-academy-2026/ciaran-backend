@@ -5,8 +5,7 @@ on:
   pull_request:
   push:
     branches:
-      - main
-      - '**'
+      - feature/setup-first-ci
 
 env:
   IMAGE_NAME: ciaran-backend
