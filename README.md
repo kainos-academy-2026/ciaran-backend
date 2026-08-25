@@ -78,8 +78,8 @@ Alternatively, provide the certificate as a CI/CD secret and add it to the build
 ### Build the image
 
 ```bash
-docker build --progress=plain -t team1-backend:local .
-docker build --progress=plain -f Dockerfile.distroless -t team1-backend:distroless .
+docker build --progress=plain -t ciaran-backend:local .
+docker build --progress=plain -f Dockerfile.distroless -t ciaran-backend:distroless .
 ```
 
 ### Run with Postgres from `compose.yml`
@@ -94,11 +94,11 @@ Run the API container:
 
 ```bash
 docker run --rm -d \
-   --name team1-backend-local \
+   --name ciaran-backend-local \
    -p 3001:3001 \
    --env-file .env \
    -e DATABASE_URL='postgresql://academy_user:academy_password@host.docker.internal:5432/academy_db' \
-   team1-backend:local
+   ciaran-backend:local
 ```
 
 Check health:

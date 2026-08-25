@@ -1,24 +1,14 @@
 output "resource_group_name" {
-  description = "Name of the Azure Resource Group."
-  value       = module.resource_group.resource_group_name
+  description = "Name of the Azure resource group."
+  value       = azurerm_resource_group.main.name
 }
 
 output "resource_group_id" {
-  description = "Full Azure resource ID of the Resource Group."
-  value       = module.resource_group.resource_group_id
+  description = "ID of the Azure resource group."
+  value       = azurerm_resource_group.main.id
 }
 
 output "resource_group_location" {
-  description = "Azure region of the Resource Group."
-  value       = module.resource_group.resource_group_location
-}
-
-output "resource_group_tags" {
-  description = "Tags applied to the Resource Group."
-  value       = module.resource_group.resource_group_tags
-}
-
-output "frontend_url" {
-  description = "Public URL of the frontend Container App."
-  value       = "https://${module.frontend_container_app.fqdn}"
+  description = "Location of the Azure resource group."
+  value       = azurerm_resource_group.main.location
 }

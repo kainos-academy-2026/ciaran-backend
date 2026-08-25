@@ -10,7 +10,7 @@ on:
       - main
 
 env:
-  IMAGE_NAME: team1-backend
+  IMAGE_NAME: ciaran-backend
   TF_WORKING_DIR: my-infrastructure
   TF_ENV: dev
   ACR_NAME: acraiacademy26
