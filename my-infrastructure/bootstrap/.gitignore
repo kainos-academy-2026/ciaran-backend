@@ -1,0 +1,6 @@
+# Bootstrap state remains local until the remote backend exists.
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+*.tfvars

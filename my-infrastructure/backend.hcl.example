@@ -1,0 +1,4 @@
+resource_group_name  = "rg-terraform-state"
+storage_account_name = "stterraformstateciaran"
+container_name       = "tfstate"
+key                  = "task1-resource-group.tfstate"

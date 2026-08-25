@@ -12,7 +12,7 @@ variable "resource_group_name" {
 variable "location" {
   description = "Azure region where the resource group will be created."
   type        = string
-  default     = "uksouth"
+  default     = "ukwest"
 
   validation {
     condition     = length(trimspace(var.location)) > 0
